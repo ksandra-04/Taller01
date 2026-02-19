@@ -51,7 +51,96 @@ namespace Taller01
             this.millisecond = millisecond;
         }
 
+        public long ToMilliseconds()
+        {
+            return (hour * 3600000L) +
+                   (minute * 60000L) +
+                   (second * 1000L) +
+                   millisecond;
+        }
 
+        public long ToSeconds()
+        {
+            return ToMilliseconds() / 1000;
+        }
+
+        public long ToMinutes()
+        {
+            return ToSeconds() / 60;
+        }
+
+        public bool IsOtherDay(Time other)
+        {
+            int h = this.hour + other.hour;
+            int m = this.minute + other.minute;
+            int s = this.second + other.second;
+            int ms = this.millisecond + other.millisecond;
+
+            if (ms > 999)
+            {
+                s += ms / 1000;
+                ms %= 1000;
+            }
+
+            if (s > 59)
+            {
+                m += s / 60;
+                s %= 60;
+            }
+
+            if (m > 59)
+            {
+                h += m / 60;
+                m %= 60;
+            }
+
+            if (h >= 24)
+                return true;
+
+            return false;
+        }
+        public Time Add(Time other)
+        {
+            int h = this.hour + other.hour;
+            int m = this.minute + other.minute;
+            int s = this.second + other.second;
+            int ms = this.millisecond + other.millisecond;
+
+            if (ms > 999)
+            {
+                s += ms / 1000;
+                ms %= 1000;
+            }
+
+            if (s > 59)
+            {
+                m += s / 60;
+                s %= 60;
+            }
+
+            if (m > 59)
+            {
+                h += m / 60;
+                m %= 60;
+            }
+
+            if (h > 23)
+            {
+                h %= 24;
+            }
+
+            return new Time(h, m, s, ms);
+        }
+        public override string ToString()
+        {
+            int displayHour = hour % 12;
+            if (displayHour == 0)
+                displayHour = 12;
+
+            string tt = hour < 12 ? "AM" : "PM";
+
+            return $"{displayHour:00}:{minute:00}:{second:00}.{millisecond:000} {tt}";
+        }
 
 
 
